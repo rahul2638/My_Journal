@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Journal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --border-color: #e1e4e8;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #6b8cae;
+            --secondary-color: #4a6fa5;
+            --background-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .calendar {
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-title {
+            font-weight: bold;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .calendar-day:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.5;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .journal-nav {
+            margin-top: 20px;
+        }
+
+        .journal-nav h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-item {
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .journal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .journal-date {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .journal-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .mood-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .mood-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .mood-emoji {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .mood-option input {
+            display: none;
+        }
+
+        .mood-option input:checked + .mood-emoji {
+            transform: scale(1.2);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .expense-list {
+            margin-top: 10px;
+        }
+
+        .expense-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .expense-item input {
+            flex: 1;
+        }
+
+        .expense-item .amount {
+            width: 100px;
+        }
+
+        .add-expense {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .remove-expense {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .total-expenses {
+            font-weight: bold;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .save-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .journal-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .theme-toggle, .nav-buttons, .action-btn {
+                display: none !important;
+            }
+
+            .dashboard {
+                display: block !important;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .main-content {
+                box-shadow: none !important;
+                background: white !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">My Personal Journal</div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </header>
+
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <div class="calendar-title" id="currentMonthYear">June 2023</div>
+                        <div class="nav-buttons">
+                            <button class="nav-btn" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <button class="nav-btn" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarDays">
+                        <!-- Calendar days will be generated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="journal-nav">
+                    <h3>Journal Sections</h3>
+                    <div class="nav-item active" data-section="daily-routine">
+                        <i class="fas fa-calendar-day"></i> Daily Routine
+                    </div>
+                    <div class="nav-item" data-section="meal-record">
+                        <i class="fas fa-utensils"></i> Meal Record
+                    </div>
+                    <div class="nav-item" data-section="exercise">
+                        <i class="fas fa-dumbbell"></i> Exercise
+                    </div>
+                    <div class="nav-item" data-section="medical">
+                        <i class="fas fa-heartbeat"></i> Medical
+                    </div>
+                    <div class="nav-item" data-section="travel">
+                        <i class="fas fa-plane"></i> Travel
+                    </div>
+                    <div class="nav-item" data-section="mood">
+                        <i class="fas fa-smile"></i> Mood
+                    </div>
+                    <div class="nav-item" data-section="expenses">
+                        <i class="fas fa-wallet"></i> Expenses
+                    </div>
+                    <div class="nav-item" data-section="memorable">
+                        <i class="fas fa-star"></i> Memorable Moments
+                    </div>
+                    <div class="nav-item" data-section="notes">
+                        <i class="fas fa-sticky-note"></i> Notes
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="journal-header">
+                    <div class="journal-date" id="journalDate">Monday, June 12, 2023</div>
+                    <div class="journal-actions">
+                        <button class="action-btn" id="printJournal">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <button class="action-btn" id="saveJournal">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <form id="journalForm">
+                    <div class="journal-form">
+                        <!-- Daily Routine -->
+                        <div class="form-section full-width" data-section="daily-routine">
+                            <h3><i class="fas fa-calendar-day"></i> Daily Routine</h3>
+                            <div class="form-group">
+                                <label for="morningRoutine">Morning Routine</label>
+                                <textarea id="morningRoutine" class="form-control" placeholder="What did you do in the morning?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="afternoonRoutine">Afternoon Activities</label>
+                                <textarea id="afternoonRoutine" class="form-control" placeholder="What did you do in the afternoon?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="eveningRoutine">Evening Activities</label>
+                                <textarea id="eveningRoutine" class="form-control" placeholder="What did you do in the evening?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="nightRoutine">Night Routine</label>
+                                <textarea id="nightRoutine" class="form-control" placeholder="What did you do before bed?"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Meal Record -->
+                        <div class="form-section" data-section="meal-record">
+                            <h3><i class="fas fa-utensils"></i> Meal Record</h3>
+                            <div class="form-group">
+                                <label for="breakfast">Breakfast</label>
+                                <textarea id="breakfast" class="form-control" placeholder="What did you have for breakfast?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="lunch">Lunch</label>
+                                <textarea id="lunch" class="form-control" placeholder="What did you have for lunch?"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section" data-section="meal-record">
+                            <h3><i class="fas fa-utensils"></i> Meal Record (cont.)</h3>
+                            <div class="form-group">
+                                <label for="dinner">Dinner</label>
+                                <textarea id="dinner" class="form-control" placeholder="What did you have for dinner?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="snacks">Snacks</label>
+                                <textarea id="snacks" class="form-control" placeholder="Any snacks throughout the day?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="waterIntake">Water Intake (glasses)</label>
+                                <input type="number" id="waterIntake" class="form-control" min="0" placeholder="How many glasses of water?">
+                            </div>
+                        </div>
+
+                        <!-- Exercise -->
+                        <div class="form-section" data-section="exercise">
+                            <h3><i class="fas fa-dumbbell"></i> Exercise</h3>
+                            <div class="form-group">
+                                <label for="exerciseType">Type of Exercise</label>
+                                <input type="text" id="exerciseType" class="form-control" placeholder="e.g., Running, Yoga, Gym">
+                            </div>
+                            <div class="form-group">
+                                <label for="exerciseDuration">Duration (minutes)</label>
+                                <input type="number" id="exerciseDuration" class="form-control" min="0" placeholder="How long did you exercise?">
+                            </div>
+                            <div class="form-group">
+                                <label for="exerciseNotes">Notes</label>
+                                <textarea id="exerciseNotes" class="form-control" placeholder="Any notes about your exercise?"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Medical -->
+                        <div class="form-section" data-section="medical">
+                            <h3><i class="fas fa-heartbeat"></i> Medical</h3>
+                            <div class="form-group">
+                                <label for="medications">Medications Taken</label>
+                                <textarea id="medications" class="form-control" placeholder="List any medications you took today"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="symptoms">Symptoms</label>
+                                <textarea id="symptoms" class="form-control" placeholder="Any symptoms you experienced?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="healthNotes">Health Notes</label>
+                                <textarea id="healthNotes" class="form-control" placeholder="Any other health-related notes?"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Travel -->
+                        <div class="form-section" data-section="travel">
+                            <h3><i class="fas fa-plane"></i> Travel</h3>
+                            <div class="form-group">
+                                <label for="travelLocation">Location</label>
+                                <input type="text" id="travelLocation" class="form-control" placeholder="Where did you go today?">
+                            </div>
+                            <div class="form-group">
+                                <label for="travelPurpose">Purpose</label>
+                                <input type="text" id="travelPurpose" class="form-control" placeholder="Why did you travel?">
+                            </div>
+                            <div class="form-group">
+                                <label for="travelNotes">Travel Notes</label>
+                                <textarea id="travelNotes" class="form-control" placeholder="Any notes about your travel?"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Mood -->
+                        <div class="form-section" data-section="mood">
+                            <h3><i class="fas fa-smile"></i> Mood</h3>
+                            <div class="form-group">
+                                <label>How was your day?</label>
+                                <div class="mood-options">
+                                    <label class="mood-option">
+                                        <input type="radio" name="mood" value="great">
+                                        <span class="mood-emoji">😁</span>
+                                        <span>Great</span>
+                                    </label>
+                                    <label class="mood-option">
+                                        <input type="radio" name="mood" value="happy">
+                                        <span class="mood-emoji">😊</span>
+                                        <span>Happy</span>
+                                    </label>
+                                    <label class="mood-option">
+                                        <input type="radio" name="mood" value="average">
+                                        <span class="mood-emoji">😐</span>
+                                        <span>Average</span>
+                                    </label>
+                                    <label class="mood-option">
+                                        <input type="radio" name="mood" value="bad">
+                                        <span class="mood-emoji">😕</span>
+                                        <span>Bad</span>
+                                    </label>
+                                    <label class="mood-option">
+                                        <input type="radio" name="mood" value="worst">
+                                        <span class="mood-emoji">😢</span>
+                                        <span>Worst</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="moodDescription">Mood Description</label>
+                                <textarea id="moodDescription" class="form-control" placeholder="Describe your mood in more detail"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Expenses -->
+                        <div class="form-section full-width" data-section="expenses">
+                            <h3><i class="fas fa-wallet"></i> Expenses</h3>
+                            <div class="expense-list" id="expenseList">
+                                <!-- Expense items will be added here -->
+                            </div>
+                            <button type="button" class="add-expense" id="addExpense">
+                                <i class="fas fa-plus"></i> Add Expense
+                            </button>
+                            <div class="total-expenses">
+                                Total: ₹<span id="totalExpenses">0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Memorable Moments -->
+                        <div class="form-section full-width" data-section="memorable">
+                            <h3><i class="fas fa-star"></i> Memorable Moments</h3>
+                            <div class="form-group">
+                                <label for="memorableMoment">Highlight of the Day</label>
+                                <textarea id="memorableMoment" class="form-control" placeholder="What was the most memorable part of your day?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Special Moments</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="achievement"> Achievement
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="learning"> Learning
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="family"> Family Time
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="friends"> Friends
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="nature"> Nature
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="creative"> Creative
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="relaxation"> Relaxation
+                                    </label>
+                                    <label class="checkbox-item">
+                                        <input type="checkbox" name="specialMoments" value="other"> Other
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="form-section full-width" data-section="notes">
+                            <h3><i class="fas fa-sticky-note"></i> Notes</h3>
+                            <div class="form-group">
+                                <label for="dailyNotes">Additional Notes</label>
+                                <textarea id="dailyNotes" class="form-control" placeholder="Any other thoughts or notes for today?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="gratitude">Gratitude Journal</label>
+                                <textarea id="gratitude" class="form-control" placeholder="What are you grateful for today?"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section full-width">
+                            <button type="submit" class="save-btn">
+                                <i class="fas fa-save"></i> Save Journal Entry
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.setAttribute('data-theme', 
+                body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+            
+            const icon = themeToggle.querySelector('i');
+            if (body.getAttribute('data-theme') === 'dark') {
+                icon.className = 'fas fa-sun';
+                themeToggle.textContent = '';
+                themeToggle.appendChild(icon);
+                themeToggle.appendChild(document.createTextNode(' Light Mode'));
+            } else {
+                icon.className = 'fas fa-moon';
+                themeToggle.textContent = '';
+                themeToggle.appendChild(icon);
+                themeToggle.appendChild(document.createTextNode(' Dark Mode'));
+            }
+            
+            // Save theme preference to localStorage
+            localStorage.setItem('journalTheme', body.getAttribute('data-theme'));
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('journalTheme') === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            const icon = themeToggle.querySelector('i');
+            icon.className = 'fas fa-sun';
+            themeToggle.textContent = '';
+            themeToggle.appendChild(icon);
+            themeToggle.appendChild(document.createTextNode(' Light Mode'));
+        }
+        
+        // Calendar functionality
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+        
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        
+        function renderCalendar() {
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+            
+            document.getElementById('currentMonthYear').textContent = 
+                `${monthNames[currentMonth]} ${currentYear}`;
+            
+            let calendarHTML = '';
+            
+            // Render day names
+            for (let i = 0; i < 7; i++) {
+                calendarHTML += `<div class="calendar-day" style="font-weight:bold">${dayNames[i].substring(0, 3)}</div>`;
+            }
+            
+            // Render empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                calendarHTML += `<div class="calendar-day other-month"></div>`;
+            }
+            
+            // Render days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(currentYear, currentMonth, i);
+                const isToday = dayDate.toDateString() === new Date().toDateString();
+                const hasEntry = localStorage.getItem(`journal_${dayDate.toISOString().split('T')[0]}`) !== null;
+                
+                let dayClass = 'calendar-day';
+                if (isToday) dayClass += ' active';
+                if (hasEntry) dayClass += ' has-entry';
+                
+                calendarHTML += `<div class="${dayClass}" data-date="${i}">${i}</div>`;
+            }
+            
+            // Calculate remaining cells to fill the grid
+            const totalCells = startingDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            
+            for (let i = 1; i <= remainingCells; i++) {
+                calendarHTML += `<div class="calendar-day other-month"></div>`;
+            }
+            
+            document.getElementById('calendarDays').innerHTML = calendarHTML;
+            
+            // Add click event to days
+            document.querySelectorAll('.calendar-day:not(.other-month)').forEach(day => {
+                day.addEventListener('click', () => {
+                    const selectedDate = new Date(currentYear, currentMonth, parseInt(day.dataset.date));
+                    loadJournalEntry(selectedDate);
+                    
+                    // Update active day
+                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                    day.classList.add('active');
+                });
+            });
+            
+            // Update journal date display
+            updateJournalDateDisplay();
+        }
+        
+        function updateJournalDateDisplay() {
+            const activeDay = document.querySelector('.calendar-day.active');
+            let displayDate;
+            
+            if (activeDay && activeDay.dataset.date) {
+                const day = parseInt(activeDay.dataset.date);
+                const displayDay = new Date(currentYear, currentMonth, day);
+                displayDate = `${dayNames[displayDay.getDay()]}, ${monthNames[displayDay.getMonth()]} ${day}, ${displayDay.getFullYear()}`;
+            } else {
+                displayDate = `${dayNames[currentDate.getDay()]}, ${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+            }
+            
+            document.getElementById('journalDate').textContent = displayDate;
+        }
+        
+        // Navigation buttons
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+        
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+        
+        // Journal navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                const section = item.dataset.section;
+                document.querySelectorAll('.form-section').forEach(sec => {
+                    sec.style.display = 'none';
+                });
+                
+                if (section === 'daily-routine') {
+                    document.querySelectorAll('.form-section').forEach(sec => {
+                        sec.style.display = 'block';
+                    });
+                } else {
+                    document.querySelector(`.form-section[data-section="${section}"]`).style.display = 'block';
+                    if (section === 'expenses') {
+                        calculateTotalExpenses();
+                    }
+                }
+            });
+        });
+        
+        // Expense functionality
+        let expenseCounter = 0;
+        
+        document.getElementById('addExpense').addEventListener('click', () => {
+            const expenseList = document.getElementById('expenseList');
+            const expenseItem = document.createElement('div');
+            expenseItem.className = 'expense-item';
+            expenseItem.innerHTML = `
+                <input type="text" class="form-control description" placeholder="Description">
+                <input type="number" class="form-control amount" placeholder="Amount" min="0" step="0.01">
+                <button type="button" class="remove-expense">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            expenseItem.querySelector('.remove-expense').addEventListener('click', () => {
+                expenseItem.remove();
+                calculateTotalExpenses();
+            });
+            
+            expenseItem.querySelector('.amount').addEventListener('input', calculateTotalExpenses);
+            
+            expenseList.appendChild(expenseItem);
+            expenseCounter++;
+        });
+        
+        function calculateTotalExpenses() {
+            let total = 0;
+            document.querySelectorAll('.expense-item .amount').forEach(input => {
+                const amount = parseFloat(input.value) || 0;
+                total += amount;
+            });
+            document.getElementById('totalExpenses').textContent = total.toFixed(2);
+        }
+        
+        // Load journal entry for a specific date
+        function loadJournalEntry(date) {
+            const dateString = date.toISOString().split('T')[0];
+            const entry = localStorage.getItem(`journal_${dateString}`);
+            
+            if (entry) {
+                const data = JSON.parse(entry);
+                
+                // Fill form with saved data
+                for (const key in data) {
+                    if (key === 'expenses') {
+                        // Handle expenses separately
+                        const expenseList = document.getElementById('expenseList');
+                        expenseList.innerHTML = '';
+                        
+                        data.expenses.forEach(exp => {
+                            const expenseItem = document.createElement('div');
+                            expenseItem.className = 'expense-item';
+                            expenseItem.innerHTML = `
+                                <input type="text" class="form-control description" placeholder="Description" value="${exp.description}">
+                                <input type="number" class="form-control amount" placeholder="Amount" min="0" step="0.01" value="${exp.amount}">
+                                <button type="button" class="remove-expense">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            `;
+                            expenseItem.querySelector('.remove-expense').addEventListener('click', () => {
+                                expenseItem.remove();
+                                calculateTotalExpenses();
+                            });
+                            
+                            expenseItem.querySelector('.amount').addEventListener('input', calculateTotalExpenses);
+                            
+                            expenseList.appendChild(expenseItem);
+                        });
+                        
+                        calculateTotalExpenses();
+                    } else if (key === 'specialMoments') {
+                        // Handle checkboxes
+                        data.specialMoments.forEach(value => {
+                            const checkbox = document.querySelector(`input[name="specialMoments"][value="${value}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    } else if (key === 'mood') {
+                        // Handle radio buttons
+                        const radio = document.querySelector(`input[name="mood"][value="${data.mood}"]`);
+                        if (radio) radio.checked = true;
+                    } else {
+                        // Handle regular inputs
+                        const element = document.getElementById(key);
+                        if (element) element.value = data[key];
+                    }
+                }
+            } else {
+                // Clear form if no entry exists
+                document.getElementById('journalForm').reset();
+                document.getElementById('expenseList').innerHTML = '';
+                document.getElementById('totalExpenses').textContent = '0.00';
+            }
+        }
+        
+        // Save journal entry
+        document.getElementById('journalForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const activeDay = document.querySelector('.calendar-day.active');
+            let day;
+            
+            if (activeDay && activeDay.dataset.date) {
+                day = parseInt(activeDay.dataset.date);
+            } else {
+                day = currentDate.getDate();
+            }
+            
+            const entryDate = new Date(currentYear, currentMonth, day);
+            const dateString = entryDate.toISOString().split('T')[0];
+            
+            // Collect all form data
+            const formData = {
+                morningRoutine: document.getElementById('morningRoutine').value,
+                afternoonRoutine: document.getElementById('afternoonRoutine').value,
+                eveningRoutine: document.getElementById('eveningRoutine').value,
+                nightRoutine: document.getElementById('nightRoutine').value,
+                breakfast: document.getElementById('breakfast').value,
+                lunch: document.getElementById('lunch').value,
+                dinner: document.getElementById('dinner').value,
+                snacks: document.getElementById('snacks').value,
+                waterIntake: document.getElementById('waterIntake').value,
+                exerciseType: document.getElementById('exerciseType').value,
+                exerciseDuration: document.getElementById('exerciseDuration').value,
+                exerciseNotes: document.getElementById('exerciseNotes').value,
+                medications: document.getElementById('medications').value,
+                symptoms: document.getElementById('symptoms').value,
+                healthNotes: document.getElementById('healthNotes').value,
+                travelLocation: document.getElementById('travelLocation').value,
+                travelPurpose: document.getElementById('travelPurpose').value,
+                travelNotes: document.getElementById('travelNotes').value,
+                mood: document.querySelector('input[name="mood"]:checked')?.value || '',
+                moodDescription: document.getElementById('moodDescription').value,
+                memorableMoment: document.getElementById('memorableMoment').value,
+                specialMoments: Array.from(document.querySelectorAll('input[name="specialMoments"]:checked')).map(cb => cb.value),
+                dailyNotes: document.getElementById('dailyNotes').value,
+                gratitude: document.getElementById('gratitude').value,
+                expenses: Array.from(document.querySelectorAll('.expense-item')).map(item => ({
+                    description: item.querySelector('.description').value,
+                    amount: parseFloat(item.querySelector('.amount').value) || 0
+                }))
+            };
+            
+            // Save to localStorage
+            localStorage.setItem(`journal_${dateString}`, JSON.stringify(formData));
+            
+            // Update calendar to show this day has an entry
+            renderCalendar();
+            
+            // Show success message
+            alert('Journal entry saved successfully!');
+        });
+        
+        // Print functionality
+        document.getElementById('printJournal').addEventListener('click', () => {
+            window.print();
+        });
+        
+        // Initialize calendar and load today's entry
+        renderCalendar();
+        loadJournalEntry(currentDate);
+        
+        // Show all sections by default
+        document.querySelectorAll('.form-section').forEach(sec => {
+            sec.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
